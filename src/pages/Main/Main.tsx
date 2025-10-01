@@ -1,55 +1,9 @@
 import { MainProps } from './Main.types';
-import { type Card } from '../../types';
-import { Card as CardComponent } from '../../components/Card';
+import { OfferCardList } from '../../components/OfferCardList';
+import clsx from 'clsx';
+import { Link } from 'react-router-dom';
 
-const CARDS: Card[] = [
-  {
-    id: crypto.randomUUID(),
-    isPremium: true,
-    imageSrc: 'img/apartment-01.jpg',
-    price: 120,
-    rating: 4,
-    name: 'Beautiful & luxurious apartment at great location',
-    type: 'Apartment',
-  },
-  {
-    id: crypto.randomUUID(),
-    imageSrc: 'img/room.jpg',
-    price: 80,
-    isBookmarked: true,
-    rating: 4,
-    name: 'Wood and stone place',
-    type: 'Apartment',
-  },
-  {
-    id: crypto.randomUUID(),
-    imageSrc: 'img/apartment-02.jpg',
-    price: 132,
-    rating: 4,
-    name: 'Canal View Prinsengracht',
-    type: 'Apartment',
-  },
-  {
-    id: crypto.randomUUID(),
-    isPremium: true,
-    imageSrc: 'img/apartment-03.jpg',
-    price: 180,
-    rating: 5,
-    name: 'Nice, cozy, warm big bed apartment',
-    type: 'Apartment',
-  },
-  {
-    id: crypto.randomUUID(),
-    imageSrc: 'img/room.jpg',
-    price: 80,
-    isBookmarked: true,
-    rating: 4,
-    name: 'Wood and stone place',
-    type: 'Room',
-  },
-];
-
-export const Main = ({ placesCount }: MainProps) => (
+export const Main = ({ offers }: MainProps) => (
   <div className="page page--gray page--main">
     <header className="header">
       <div className="container">
@@ -68,16 +22,16 @@ export const Main = ({ placesCount }: MainProps) => (
           <nav className="header__nav">
             <ul className="header__nav-list">
               <li className="header__nav-item user">
-                <a
+                <Link
                   className="header__nav-link header__nav-link--profile"
-                  href="#"
+                  to="/favorites"
                 >
                   <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                   <span className="header__user-name user__name">
                     Oliver.conner@gmail.com
                   </span>
                   <span className="header__favorite-count">3</span>
-                </a>
+                </Link>
               </li>
               <li className="header__nav-item">
                 <a className="header__nav-link" href="#">
@@ -90,7 +44,11 @@ export const Main = ({ placesCount }: MainProps) => (
       </div>
     </header>
 
-    <main className="page__main page__main--index">
+    <main
+      className={clsx('page__main page__main--index', {
+        'page__main--index-empty': !offers.length,
+      })}
+    >
       <h1 className="visually-hidden">Cities</h1>
       <div className="tabs">
         <section className="locations container">
@@ -129,48 +87,71 @@ export const Main = ({ placesCount }: MainProps) => (
         </section>
       </div>
       <div className="cities">
-        <div className="cities__places-container container">
-          <section className="cities__places places">
-            <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">
-              {placesCount} places to stay in Amsterdam
-            </b>
-            <form className="places__sorting" action="#" method="get">
-              <span className="places__sorting-caption">Sort by</span>
-              <span className="places__sorting-type" tabIndex={0}>
-                Popular
-                <svg className="places__sorting-arrow" width="7" height="4">
-                  <use xlinkHref="#icon-arrow-select"></use>
-                </svg>
-              </span>
-              <ul className="places__options places__options--custom places__options--opened">
-                <li
-                  className="places__option places__option--active"
-                  tabIndex={0}
-                >
+        {offers.length ? (
+          <div className="cities__places-container container">
+            <section className="cities__places places">
+              <h2 className="visually-hidden">Places</h2>
+              <b className="places__found">
+                {offers.length} places to stay in Amsterdam
+              </b>
+              <form className="places__sorting" action="#" method="get">
+                <span className="places__sorting-caption">Sort by</span>
+                <span className="places__sorting-type" tabIndex={0}>
                   Popular
-                </li>
-                <li className="places__option" tabIndex={0}>
-                  Price: low to high
-                </li>
-                <li className="places__option" tabIndex={0}>
-                  Price: high to low
-                </li>
-                <li className="places__option" tabIndex={0}>
-                  Top rated first
-                </li>
-              </ul>
-            </form>
-            <div className="cities__places-list places__list tabs__content">
-              {CARDS.slice(0, placesCount).map((card) => (
-                <CardComponent key={card.id} {...card} />
-              ))}
+                  <svg className="places__sorting-arrow" width="7" height="4">
+                    <use xlinkHref="#icon-arrow-select"></use>
+                  </svg>
+                </span>
+                <ul className="places__options places__options--custom places__options--opened">
+                  <li
+                    className="places__option places__option--active"
+                    tabIndex={0}
+                  >
+                    Popular
+                  </li>
+                  <li className="places__option" tabIndex={0}>
+                    Price: low to high
+                  </li>
+                  <li className="places__option" tabIndex={0}>
+                    Price: high to low
+                  </li>
+                  <li className="places__option" tabIndex={0}>
+                    Top rated first
+                  </li>
+                </ul>
+              </form>
+              <div className="cities__places-list places__list tabs__content">
+                <OfferCardList
+                  offers={offers}
+                  offerCardProps={{
+                    previewImageWidth: 260,
+                    previewImageHeight: 200,
+                    classNames: {
+                      root: 'cities__card',
+                      imageWrapper: 'cities__image-wrapper',
+                    },
+                  }}
+                />
+              </div>
+            </section>
+            <div className="cities__right-section">
+              <section className="cities__map map"></section>
             </div>
-          </section>
-          <div className="cities__right-section">
-            <section className="cities__map map"></section>
           </div>
-        </div>
+        ) : (
+          <div className="cities__places-container cities__places-container--empty container">
+            <section className="cities__no-places">
+              <div className="cities__status-wrapper tabs__content">
+                <b className="cities__status">No places to stay available</b>
+                <p className="cities__status-description">
+                  We could not find any property available at the moment in
+                  Dusseldorf
+                </p>
+              </div>
+            </section>
+            <div className="cities__right-section"></div>
+          </div>
+        )}
       </div>
     </main>
   </div>

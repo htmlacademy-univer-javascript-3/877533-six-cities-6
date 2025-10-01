@@ -1,35 +1,47 @@
 import clsx from 'clsx';
-import { CardProps } from './Card.types';
+import { OfferCardProps } from './OfferCard.types';
+import { Link } from 'react-router-dom';
 
-export const Card = ({
-  isPremium,
-  imageSrc,
-  price,
-  isBookmarked,
-  rating,
-  name,
-  type,
+export const OfferCard = ({
+  offer: {
+    id,
+    isPremium,
+    previewImage,
+    price,
+    isFavorite,
+    rating,
+    title,
+    type,
+  },
   className,
+  classNames,
+  previewImageWidth,
+  previewImageHeight,
   ...props
-}: CardProps) => (
-  <article className={clsx('cities__card place-card', className)} {...props}>
+}: OfferCardProps) => (
+  <article
+    className={clsx('place-card', className, classNames?.root)}
+    {...props}
+  >
     {isPremium && (
       <div className="place-card__mark">
         <span>Premium</span>
       </div>
     )}
-    <div className="cities__image-wrapper place-card__image-wrapper">
-      <a href="#">
+    <div
+      className={clsx('place-card__image-wrapper', classNames?.imageWrapper)}
+    >
+      <Link to={`/offer/${id}`}>
         <img
           className="place-card__image"
-          src={imageSrc}
-          width="260"
-          height="200"
+          src={previewImage}
+          width={previewImageWidth}
+          height={previewImageHeight}
           alt="Place image"
         />
-      </a>
+      </Link>
     </div>
-    <div className="place-card__info">
+    <div className={clsx('place-card__info', classNames?.info)}>
       <div className="place-card__price-wrapper">
         <div className="place-card__price">
           <b className="place-card__price-value">&euro;{price}</b>
@@ -38,7 +50,7 @@ export const Card = ({
 
         <button
           className={clsx('place-card__bookmark-button button', {
-            'place-card__bookmark-button--active': isBookmarked,
+            'place-card__bookmark-button--active': isFavorite,
           })}
           type="button"
         >
@@ -46,7 +58,7 @@ export const Card = ({
             <use xlinkHref="#icon-bookmark"></use>
           </svg>
           <span className="visually-hidden">
-            {isBookmarked ? 'In bookmarks' : 'To bookmarks'}
+            {isFavorite ? 'In bookmarks' : 'To bookmarks'}
           </span>
         </button>
       </div>
@@ -57,7 +69,7 @@ export const Card = ({
         </div>
       </div>
       <h2 className="place-card__name">
-        <a href="#">{name}</a>
+        <Link to={`/offer/${id}`}>{title}</Link>
       </h2>
       <p className="place-card__type">{type}</p>
     </div>

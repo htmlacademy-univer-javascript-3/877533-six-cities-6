@@ -1,10 +1,23 @@
-export type Card = {
-  id: string;
-  isPremium?: boolean;
-  imageSrc?: string;
-  price: number;
-  isBookmarked?: boolean;
-  rating: number;
+export type Location = {
+  latitude: number;
+  longitude: number;
+  zoom: number;
+};
+
+export type City = {
   name: string;
-  type: 'Apartment' | 'Room';
+  location: Location;
+};
+
+export type Offer = {
+  id: string;
+  title: string;
+  type: string;
+  price: number;
+  previewImage: string;
+  city: City;
+  location: Location;
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
 };
