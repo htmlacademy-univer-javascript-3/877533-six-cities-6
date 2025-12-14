@@ -121,7 +121,7 @@ export const login =
       try {
         const { data } = await api.post<AuthInfo>('/login', loginData);
 
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('six-cities-token', data.token);
 
         dispatch(actions.requireAuth('AUTH'));
         dispatch(actions.setAuthInfo(data));
@@ -142,7 +142,7 @@ export const logout =
       try {
         await api.delete('/logout');
       } catch {}
-      localStorage.removeItem('token');
+      localStorage.removeItem('six-cities-token');
 
       dispatch(actions.requireAuth('NO_AUTH'));
       dispatch(actions.setAuthInfo(null));

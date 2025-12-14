@@ -1,7 +1,7 @@
 export const OFFER_SORT_OPTIONS = [
   { label: 'Popular', value: 'popular' },
   { label: 'Price: low to high', value: 'price:low-to-high' },
-  { label: 'Price: high to low', value: 'price:hight-to-low' },
+  { label: 'Price: high to low', value: 'price:high-to-low' },
   { label: 'Top rated first', value: 'top-rated-first' },
 ] as const;
 

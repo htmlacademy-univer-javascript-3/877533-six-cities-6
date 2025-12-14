@@ -10,7 +10,7 @@ export const createAPI = (): AxiosInstance => {
   });
 
   api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('six-cities-token');
     if (token) {
       config.headers['X-Token'] = token;
     }
@@ -21,7 +21,7 @@ export const createAPI = (): AxiosInstance => {
     (response) => response,
     (error) => {
       if (isAxiosError(error) && error.response?.status === 401) {
-        localStorage.removeItem('token');
+        localStorage.removeItem('six-cities-token');
       }
       throw error;
     }

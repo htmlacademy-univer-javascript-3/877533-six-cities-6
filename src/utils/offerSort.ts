@@ -20,6 +20,6 @@ export const offerComparators: Record<
 > = {
   popular: comparePopular,
   'price:low-to-high': comparePriceLowToHigh,
-  'price:hight-to-low': comparePriceHighToLow,
+  'price:high-to-low': comparePriceHighToLow,
   'top-rated-first': compareTopRatedFirst,
 };
